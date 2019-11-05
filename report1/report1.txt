@@ -1,0 +1,54 @@
+LEVEL1
+kaggleのtitanicデータセットを使用しました。中身としては、乗客の名前、性別、年齢、部屋番号、などいろいろな個人のデータからその乗客が、生き残ったか生き残ってないかを分類するデータセットである。
+LEVEL2
+サンプル数
+ 892個
+特徴ベクトルの次元数
+ 10次元
+各特徴の説明とデータ形式（冒頭3つの特徴まで）
+ Name:乗客の名前
+ Sex:男性か女性
+ Age:乗客の年齢
+分類クラス数
+ 2つ
+クラスごとの説明
+ 0:dead
+ 1:alive
+LEVEL3
+ ロジスティック回帰
+  ハイパーパラメータ
+  　penalty:過学習に陥らないように正則化の仕方を決めるパラメータ。モデルが複雑すぎないようにペネルティをかける。l1とl2の二つを選択できるが、
+  デフォルトではl2に設定されている。
+    C:正則化強度。正の浮動小数点でなければならない。サポートベクターマシンと同様に、値が小さいほど正則化が強くなります。デフォルトでは、1.0。
+ サポートベクターマシーン(SVM)
+    penalty:過学習に陥らないように正則化の仕方を決めるパラメータ。L1とL2のどちらかを選択できる。デフォルトでは、L2である。
+    loss:評価関数。予測値と正解値との分類誤差を返す。
+LEVEL4
+ソースコード
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+train = pd.read_csv("./titanic/train.csv")
+test = pd.read_csv("./titanic/test.csv")
+
+train['Gender'] = train['Sex'].map({'female': 0, 'male': 1}).astype(int)
+Gender = train['Gender']
+label1 = train.loc[:,["Survived"]].values
+test_gender = test['Sex'].map({'female': 0, 'male': 1}).astype(int)
+
+Gender = Gender.values.reshape(-1, 1)
+label1 = label1.reshape(-1,1)
+test_gender = test_gender.values.reshape(-1,1)
+
+lr_model = LogisticRegression()
+lr_model.fit(Gender,label1)
+
+pre = lr_model.predict(test_gender)
+
+精度:0.76555
+
+
+
+Options
+
+
